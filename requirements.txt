@@ -1,0 +1,6 @@
+webdriver-manager
+python-dotenv
+networkx
+matplotlib
+scipy
+selenium
