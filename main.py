@@ -2,7 +2,7 @@ import argparse
 import os
 import sys
 import json
-from scrape import fetch_profile_path, login, scrape, crawl
+from scraper import Scraper
 
 # Create argument parser
 parser = argparse.ArgumentParser(description='Facebook Group Scraper and Visualiser.')
@@ -22,16 +22,21 @@ def main(group_id, members=None, friends=None, start_pos=0, end_pos=None):
     Main program process.
     
     :param group_id: The Facebook id of the group to scrape
+    :param members: An existing list of facebook group members
+    :param friends: An existing dictionary of members mapped to their friends
+    :param start_pos: The position of the group member to start with
+    :param end_pos: The position of the group member to end with
     """
     # Login
-    login()
+    scraper = Scraper(group_id=group_id, members=members, friends_all=friends)
+    scraper.login()
 
     # Scrape Facebook group members
     if members is None:
-        members = scrape(group_id=group_id)
+        members = scraper.scrape()
 
     # Scrape Facebook friends of each group member that are also in the group
-    friends_all = crawl(members=members, friends_all=friends, start_pos=start_pos, end_pos=end_pos)
+    friends_all = scraper.crawl(start_pos=start_pos, end_pos=end_pos)
     
     return 0
 
