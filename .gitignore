@@ -1,0 +1,9 @@
+package-lock.json
+__pycache__
+
+# Logs
+geckodriver.log
+
+# Generated files
+members
+friends
