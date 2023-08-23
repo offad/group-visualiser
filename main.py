@@ -2,6 +2,10 @@ import argparse
 import os
 import sys
 import json
+import math
+import networkx as nx
+import pandas as pd
+from pyvis.network import Network
 from scraper import Scraper
 
 # Create argument parser
@@ -16,6 +20,51 @@ parser.add_argument("-e", help="The position of the group member to end with (in
 args = parser.parse_args()
     
 # Functions:
+
+def visualise():
+    """
+    Network program process.
+    """
+
+    # Open nodes
+    with open("members", "r", encoding="utf-8") as file:
+        nodes = json.load(file)
+
+    # Open edges
+    with open(friends_file_path, "r", encoding="utf-8") as file:
+        links = json.load(file)
+
+    # Create undirected graph with networkx
+    graph = nx.Graph()
+
+    # Add nodes
+    graph.add_nodes_from([
+        (
+            member["id"],
+            dict(name=member["name"])
+        ) 
+        for member in nodes
+    ])
+
+    # Add edges
+    edges = []
+    for id, friends in links.items():
+        edges += [
+            (
+                id,
+                friend["id"]
+            ) for friend in friends
+        ]
+    graph.add_edges_from(edges)
+
+    # Plot with pyvis
+    net = Network(
+        select_menu = True, # Show part 1 in the plot (optional)
+        filter_menu = True, # Show part 2 in the plot (optional)
+    )
+    net.show_buttons() # Show part 3 in the plot (optional)
+    net.from_nx(graph) # Create directly from nx graph
+    net.show('network.html', notebook = False) # for some reason the Network .show() function has notebook=True
 
 def main(group_id, members=None, friends=None, start_pos=0, end_pos=None):
     """
@@ -65,3 +114,6 @@ if __name__ == '__main__':
 
     # Run the program
     main(group_id=args.group_id, members=members, friends=friends, start_pos=start_param, end_pos=end_param)
+
+    # Visualise the group network
+    visualise()

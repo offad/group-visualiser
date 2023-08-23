@@ -26,5 +26,3 @@ pip install -r requirements.txt --user
 For example, `python main.py 2099121503727072` runs a full scrape on the Facebook group 'University of St Andrews Class of 2024' since `2099121503727072` is the group's id.
 
 Use a website like <http://lookup-id.com/> to find your group's id.
-
-

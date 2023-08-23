@@ -1,5 +1,6 @@
 package-lock.json
 __pycache__
+lib
 
 # Logs
 geckodriver.log
@@ -8,3 +9,4 @@ geckodriver.log
 members
 friends
 plot.pdf
+network.html
